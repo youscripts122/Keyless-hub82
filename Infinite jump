@@ -1,0 +1,33 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local infiniteJump = false
+
+-- Small GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "InfiniteJumpGUI"
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 120, 0, 35)
+button.Position = UDim2.new(0, 15, 0, 100)
+button.Text = "Infinite Jump: OFF"
+button.TextSize = 14
+button.Parent = gui
+
+button.MouseButton1Click:Connect(function()
+	infiniteJump = not infiniteJump
+	button.Text = infiniteJump and "Infinite Jump: ON" or "Infinite Jump: OFF"
+end)
+
+UserInputService.JumpRequest:Connect(function()
+	if infiniteJump then
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+		if humanoid then
+			humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+	end
+end)
